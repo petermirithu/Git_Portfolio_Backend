@@ -7,4 +7,9 @@ urlpatterns = [
     path('sign_in_user', sign_in_user, name='sign_in_user'),                        
     path('forgot_password', forgot_password, name='forgot_password'),                        
     path('reset_password', reset_password, name='reset_password'),    
+
+    path('add_project', add_project, name='add_project'),    
+    path('update_project', update_project, name='update_project'),        
+    path('delete_project/<str:project_id>', delete_project, name='delete_project'),        
+    path('get_projects/<str:user_id>', get_projects, name='get_projects'),    
 ]

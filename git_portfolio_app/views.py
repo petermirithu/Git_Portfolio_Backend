@@ -85,6 +85,7 @@ def sign_in_user(request):
         return Response("An error occured while authenticating you", status=status.HTTP_400_BAD_REQUEST)                        
 
 @api_view(['PUT'])
+@permission_classes([])
 def forgot_password(request):
     data = json.loads(request.body)
     try:         
@@ -105,6 +106,7 @@ def forgot_password(request):
         return Response("Error while updating your user profile", status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT'])
+@permission_classes([])
 def reset_password(request):
     data = json.loads(request.body)
     try:                         
@@ -124,3 +126,82 @@ def reset_password(request):
         print(traceback.format_exc())           
         print("**********************************************************")     
         return Response("Error while updating your user profile", status=status.HTTP_400_BAD_REQUEST) 
+    
+@api_view(['POST'])
+@permission_classes([isAuthorized])
+def add_project(request):
+    data = json.loads(request.body)
+    try:                         
+        name=data["name"]
+        description=data["description"]
+        technologies=data["technologies"]
+        link=data["link"]
+
+        try:
+            project=Projects.objects.get(name=name)        
+            return Response("nameTaken", status=status.HTTP_400_BAD_REQUEST)                            
+        except Projects.DoesNotExist:
+            new_project = Projects(
+                        name=name,
+                        description=description,
+                        technologies=technologies,                                                 
+                        linkl=link,                       
+                        created_at=getTimeNow()
+                        )
+            new_project.save()  
+            return Response("Successfully saved the project", status=status.HTTP_201_CREATED)                            
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while saving your project", status=status.HTTP_400_BAD_REQUEST)    
+
+@api_view(['PUT'])
+@permission_classes([isAuthorized])
+def update_project(request):
+    data = json.loads(request.body)
+    try:                         
+        name=data["name"]
+        description=data["description"]
+        technologies=data["technologies"]
+        link=data["link"]
+        project_id=data["project_id"]
+
+        Projects.objects.filter(id=project_id).update(
+            name=name,
+            description=description,
+            technologies=technologies,                                                 
+            link=link,       
+        )
+        return Response("Successfully updated the project", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while updating your project", status=status.HTTP_400_BAD_REQUEST)      
+
+
+@api_view(['DELETE'])
+@permission_classes([isAuthorized])
+def delete_project(request, project_id):    
+    try:                         
+        Projects.objects.filter(id=project_id).delete() 
+        return Response("Successfully deleted the project", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while deleting your project", status=status.HTTP_400_BAD_REQUEST)      
+
+@api_view(['GET'])
+@permission_classes([isAuthorized])
+def get_projects(request, user_id):    
+    try:                         
+        projects = Projects.objects.filter(user_id=user_id)
+        serialized_projects = ProjectsSerializer(projects, many=True).data
+        return Response(serialized_projects, status=status.HTTP_200_OK)
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while getting your projects", status=status.HTTP_400_BAD_REQUEST)      
