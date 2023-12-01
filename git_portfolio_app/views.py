@@ -206,3 +206,100 @@ def get_projects(request, user_id):
         print(traceback.format_exc())           
         print("**********************************************************")     
         return Response("Error while getting your projects", status=status.HTTP_400_BAD_REQUEST)      
+
+@api_view(['POST'])
+@permission_classes([isAuthorized])
+def add_experience(request):
+    data = json.loads(request.body)
+    try:                             
+        title=data["title"]
+        description=data["description"]
+        employmentType=data["employmentType"]
+        companyName=data["companyName"]
+        location=data["location"]
+        locationType=data["locationType"]
+        currentlyWorking=data["currentlyWorking"]
+        startDate=data["startDate"]
+        endDate=data["endDate"]
+        user_id=data["user_id"]
+        
+        new_experience = Experiences(
+            title=title,
+            description=description,
+            employmentType=employmentType,                                                 
+            companyName=companyName,    
+            location=location,
+            locationType=locationType,
+            currentlyWorking=currentlyWorking,
+            startDate=startDate,
+            endDate=endDate,
+            user_id=user_id,                   
+            created_at=getTimeNow()
+        )
+        new_experience.save()  
+        return Response("Successfully saved the experience", status=status.HTTP_201_CREATED)                            
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while saving your experience", status=status.HTTP_400_BAD_REQUEST)        
+
+@api_view(['PUT'])
+@permission_classes([isAuthorized])
+def update_experience(request):
+    data = json.loads(request.body)
+    try:                         
+        title=data["title"]
+        description=data["description"]
+        employmentType=data["employmentType"]
+        companyName=data["companyName"]
+        location=data["location"]
+        locationType=data["locationType"]
+        currentlyWorking=data["currentlyWorking"]
+        startDate=data["startDate"]
+        endDate=data["endDate"]
+        experience_id=data["experience_id"]
+
+        Experiences.objects.filter(id=experience_id).update(
+            title=title,
+            description=description,
+            employmentType=employmentType,                                                 
+            companyName=companyName,    
+            location=location,
+            locationType=locationType,
+            currentlyWorking=currentlyWorking,
+            startDate=startDate,
+            endDate=endDate,
+        )
+        return Response("Successfully updated the experience", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while updating your experience", status=status.HTTP_400_BAD_REQUEST)          
+
+@api_view(['DELETE'])
+@permission_classes([isAuthorized])
+def delete_experience(request, experience_id):    
+    try:                         
+        Experiences.objects.filter(id=experience_id).delete() 
+        return Response("Successfully deleted the experience", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while deleting your experience", status=status.HTTP_400_BAD_REQUEST)      
+
+@api_view(['GET'])
+@permission_classes([isAuthorized])
+def get_experiences(request, user_id):    
+    try:                         
+        experiences = Experiences.objects.filter(user_id=user_id)
+        serialized_experiences = ExperiencesSerializer(experiences, many=True).data
+        return Response(serialized_experiences, status=status.HTTP_200_OK)
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while getting your experiences", status=status.HTTP_400_BAD_REQUEST)          
+
