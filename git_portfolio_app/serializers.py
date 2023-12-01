@@ -5,3 +5,10 @@ class UsersSerializer(serializers.DocumentSerializer):
     class Meta:
         model=Users
         exclude=("password",)
+
+class ProjectsSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model=Projects
+        fields="__all__" 
+
+        
