@@ -136,6 +136,7 @@ def add_project(request):
         description=data["description"]
         technologies=data["technologies"]
         link=data["link"]
+        user_id=data["user_id"]
 
         try:
             project=Projects.objects.get(name=name)        
@@ -145,7 +146,8 @@ def add_project(request):
                         name=name,
                         description=description,
                         technologies=technologies,                                                 
-                        linkl=link,                       
+                        link=link,    
+                        user_id=user_id,                   
                         created_at=getTimeNow()
                         )
             new_project.save()  
@@ -179,7 +181,6 @@ def update_project(request):
         print(traceback.format_exc())           
         print("**********************************************************")     
         return Response("Error while updating your project", status=status.HTTP_400_BAD_REQUEST)      
-
 
 @api_view(['DELETE'])
 @permission_classes([isAuthorized])
