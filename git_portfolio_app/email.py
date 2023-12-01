@@ -11,3 +11,14 @@ def send_reset_verification_code(first_name, verification_code, recipient_email 
         return "done"
     except:
         return "error"  
+
+def send_user_message(first_name, senderMail, message, recipient_email ):
+    try:
+        subject = 'You have a new message'
+        message = f'Greetings {first_name},\n\nA user with the email "${senderMail}" has just sent you a message.\n\nBelow is the message:-\n${message}.\n\nWith kind regards,\nYour Git Portfolio Team.'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [recipient_email, ]
+        send_mail( subject, message, email_from, recipient_list )
+        return "done"
+    except:
+        return "error"      
