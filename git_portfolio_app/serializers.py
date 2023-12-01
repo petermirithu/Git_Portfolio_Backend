@@ -11,4 +11,10 @@ class ProjectsSerializer(serializers.DocumentSerializer):
         model=Projects
         fields="__all__" 
 
+class ExperiencesSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model=Experiences
+        fields="__all__" 
+
+
         

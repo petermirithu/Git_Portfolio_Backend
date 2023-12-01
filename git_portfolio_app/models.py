@@ -25,3 +25,17 @@ class Projects(Document):
     link = StringField(required=True)    
     updated_at=DateTimeField(default=datetime.datetime.utcnow)
     created_at = DateTimeField(required=True)
+
+class Experiences(Document):
+    user_id = ReferenceField(Users, reverse_delete_rule=CASCADE)
+    title = StringField(required=True)        
+    description = StringField(required=False)        
+    employmentType = StringField(required=True)        
+    companyName = StringField(required=True)        
+    location = StringField(required=True)        
+    locationType = StringField(required=True)        
+    currentlyWorking = BooleanField(required=True)        
+    startDate = StringField(required=True)        
+    endDate = StringField(required=False)    
+    updated_at=DateTimeField(default=datetime.datetime.utcnow)
+    created_at = DateTimeField(required=True)    
