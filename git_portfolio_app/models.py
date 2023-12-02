@@ -7,9 +7,14 @@ class Users(Document):
     last_name=StringField(required=True)
     email=StringField(required=True)    
     password=StringField(required=True)                
-    auth_token=StringField()
+    auth_token=StringField()    
+    github=StringField()
+    linkedin=StringField()
+    twitter=StringField()
+    youtube=StringField()
+    whatsapp=StringField()
     updated_at=DateTimeField(default=datetime.datetime.utcnow)
-    created_at=DateTimeField(required=True)
+    created_at=DateTimeField(required=True)    
 
 class VerificationCodes(Document):
     user_id = ReferenceField(Users, reverse_delete_rule=CASCADE)
@@ -39,3 +44,9 @@ class Experiences(Document):
     endDate = StringField(required=False)    
     updated_at=DateTimeField(default=datetime.datetime.utcnow)
     created_at = DateTimeField(required=True)    
+
+class Skills(Document):
+    user_id = ReferenceField(Users, reverse_delete_rule=CASCADE)
+    name = StringField(required=True)        
+    created_at = DateTimeField(required=True)
+    updated_at=DateTimeField(default=datetime.datetime.utcnow)

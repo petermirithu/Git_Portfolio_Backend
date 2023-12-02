@@ -17,4 +17,15 @@ urlpatterns = [
     path('update_experience', update_experience, name='update_experience'),        
     path('delete_experience/<str:experience_id>', delete_experience, name='delete_experience'),        
     path('get_experiences/<str:user_id>', get_experiences, name='get_experiences'),    
+
+    
+    path('update_socials', update_socials, name='update_socials'),        
+    path('get_user/<str:email>', get_user, name='get_user'),        
+
+
+    path('add_skill', add_skill, name='add_skill'),    
+    path('update_skill', update_skill, name='update_skill'),        
+    path('delete_skill/<str:skill_id>', delete_skill, name='delete_skill'),        
+    path('get_skills/<str:user_id>', get_skills, name='get_skills'),    
+    
 ]

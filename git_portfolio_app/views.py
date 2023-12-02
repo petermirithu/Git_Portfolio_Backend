@@ -303,3 +303,108 @@ def get_experiences(request, user_id):
         print("**********************************************************")     
         return Response("Error while getting your experiences", status=status.HTTP_400_BAD_REQUEST)          
 
+
+@api_view(['PUT'])
+@permission_classes([isAuthorized])
+def update_socials(request):
+    data = json.loads(request.body)
+    try:                       
+        github=data["github"]
+        linkedin=data["linkedin"]
+        twitter=data["twitter"]
+        youtube=data["youtube"]
+        whatsapp=data["whatsapp"]       
+        user_id=data["user_id"]
+        Users.objects.filter(id=user_id).update(
+            github=github,
+            linkedin=linkedin,
+            twitter=twitter,                                                 
+            youtube=youtube,    
+            whatsapp=whatsapp,            
+        )
+        return Response("Successfully updated the socials", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while updating your socials", status=status.HTTP_400_BAD_REQUEST)          
+
+
+@api_view(['GET'])
+@permission_classes([])
+def get_user(request, email):    
+    try:                         
+        user = Users.objects.filter(email=email)
+        serialized_user = UsersSerializer(user, many=False).data
+        return Response(serialized_user, status=status.HTTP_200_OK)
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while getting the user", status=status.HTTP_400_BAD_REQUEST)          
+
+@api_view(['POST'])
+@permission_classes([isAuthorized])
+def add_skill(request):
+    data = json.loads(request.body)
+    try:                             
+        name=data["name"]        
+        user_id=data["user_id"]
+        
+        new_skill = Skills(
+            name=name,            
+            user_id=user_id,                   
+            created_at=getTimeNow()
+        )
+        new_skill.save()  
+        return Response("Successfully saved the skill", status=status.HTTP_201_CREATED)                            
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while saving your skill", status=status.HTTP_400_BAD_REQUEST)        
+
+
+@api_view(['PUT'])
+@permission_classes([isAuthorized])
+def update_skill(request):
+    data = json.loads(request.body)
+    try:                       
+        name=data["name"]        
+        skill_id=data["skill_id"]
+
+        Skills.objects.filter(id=skill_id).update(
+            name=name,                      
+        )
+        return Response("Successfully updated the skill", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while updating your skill", status=status.HTTP_400_BAD_REQUEST)          
+
+
+@api_view(['DELETE'])
+@permission_classes([isAuthorized])
+def delete_skill(request, skill_id):    
+    try:                         
+        Skills.objects.filter(id=skill_id).delete() 
+        return Response("Successfully deleted the skill", status=status.HTTP_200_OK)                                                
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while deleting your skill", status=status.HTTP_400_BAD_REQUEST)      
+    
+@api_view(['GET'])
+@permission_classes([isAuthorized])
+def get_skills(request, user_id):    
+    try:                         
+        skills = Skills.objects.filter(user_id=user_id)
+        serialized_skills = SkillsSerializer(skills, many=True).data
+        return Response(serialized_skills, status=status.HTTP_200_OK)
+    except:
+        print("**********************************************************")
+        print(traceback.format_exc())           
+        print("**********************************************************")     
+        return Response("Error while getting your skills", status=status.HTTP_400_BAD_REQUEST)          

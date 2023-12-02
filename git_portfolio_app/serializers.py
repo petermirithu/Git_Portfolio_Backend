@@ -16,5 +16,12 @@ class ExperiencesSerializer(serializers.DocumentSerializer):
         model=Experiences
         fields="__all__" 
 
+class SkillsSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model=Skills
+        fields="__all__" 
+
+
+
 
         
